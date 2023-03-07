@@ -88,10 +88,14 @@ def naive():
 # METHOD FOR TASK 1
 # Creates the k-Shingles of each document and returns a list of them
 def k_shingles():
-    docs_k_shingles = []  # holds the k-shingles of each document
-
-    # implement your code here
-
+    k = parameters_dictionary['k']
+    docs_k_shingles = []
+    for i in range(1,len(document_list)):
+        doc = document_list[i]
+        doc_k_shingles = []
+        for j in range(len(doc) - k + 1):
+            doc_k_shingles.append(doc[j:j + k])
+        docs_k_shingles.append(doc_k_shingles)
     return docs_k_shingles
 
 
@@ -99,7 +103,7 @@ def k_shingles():
 # Creates a signatures set of the documents from the k-shingles list
 def signature_set(k_shingles):
     docs_sig_sets = []
-
+    
     # implement your code here
 
     return docs_sig_sets
