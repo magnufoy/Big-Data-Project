@@ -97,13 +97,14 @@ def k_shingles():
             doc_k_shingles.append(doc[j:j + k])
         docs_k_shingles.append(doc_k_shingles)
     return docs_k_shingles
+print("hei magnus")
 
 
 # METHOD FOR TASK 2
 # Creates a signatures set of the documents from the k-shingles list
 def signature_set(k_shingles):
     docs_sig_sets = []
-    
+
     # implement your code here
 
     return docs_sig_sets
