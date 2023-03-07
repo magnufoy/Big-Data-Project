@@ -97,7 +97,6 @@ def k_shingles():
             doc_k_shingles.append(doc[j:j + k])
         docs_k_shingles.append(doc_k_shingles)
     return docs_k_shingles
-print("hei magnus")
 
 
 # METHOD FOR TASK 2
