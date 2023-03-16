@@ -90,7 +90,7 @@ def naive():
 def k_shingles():
     k = parameters_dictionary['k']
     docs_k_shingles = []
-    for i in range(1,len(document_list)):
+    for i in range(1,len(document_list)+1):
         doc = document_list[i]
         doc_k_shingles = []
         for j in range(len(doc) - k + 1):
@@ -103,9 +103,16 @@ def k_shingles():
 # Creates a signatures set of the documents from the k-shingles list
 def signature_set(k_shingles):
     docs_sig_sets = []
-
-    # implement your code here
-
+    hash_values = []
+    for i in range(0,len(document_list)):
+        doc = k_shingles[i]
+        doc_sig_set = set()
+        for j in range(len(doc)):
+            hash_value = hash(doc[j])
+            if hash_value not in hash_values:
+                hash_values.append(hash_value)
+                doc_sig_set.add(hash_value)
+        docs_sig_sets.append(doc_sig_set)
     return docs_sig_sets
 
 
