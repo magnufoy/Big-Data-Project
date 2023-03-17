@@ -5,6 +5,8 @@ import sys  # for system errors and printouts
 from pathlib import Path  # for paths of files
 import os  # for reading the input data
 import time  # for timing
+import numpy as np  # for matrix operations
+import random  # for random numbers
 
 # Global parameters
 parameter_file = 'default_parameters.ini'  # the main parameters file
@@ -102,28 +104,48 @@ def k_shingles():
 # METHOD FOR TASK 2
 # Creates a signatures set of the documents from the k-shingles list
 def signature_set(k_shingles):
-    docs_sig_sets = []
+    docs_signature_sets = []
     hash_values = []
     for i in range(0,len(document_list)):
         doc = k_shingles[i]
-        doc_sig_set = set()
+        doc_signature_set = set()
         for j in range(len(doc)):
             hash_value = hash(doc[j])
             if hash_value not in hash_values:
                 hash_values.append(hash_value)
-                doc_sig_set.add(hash_value)
-        docs_sig_sets.append(doc_sig_set)
-    return docs_sig_sets
+                doc_signature_set.add(hash_value)
+        docs_signature_sets.append(doc_signature_set)
+    return docs_signature_sets
 
 
 # METHOD FOR TASK 3
 # Creates the minHash signatures after simulation of permutations
 def minHash(docs_signature_sets):
-    min_hash_signatures = []
+    
+    num_hash_functions = parameters_dictionary['permutations']
+    num_docs = len(document_list)
 
-    # implement your code here
 
-    return min_hash_signatures
+    # Generate random coefficients for each hash function
+    coeffs = []
+    for i in range(num_hash_functions):
+        a = random.randint(1, pow(2, 32) - 1)
+        b = random.randint(0, pow(2, 32) - 1)
+        p = 4294967311
+        coeffs.append((a, b, p))
+
+    # Compute the MinHash signature matrix
+    signature_matrix = np.full((num_hash_functions, num_docs), np.inf)
+    for i in range(num_hash_functions):
+        for j in range(num_docs):
+            for hash_value in docs_signature_sets[j]:
+                # Apply a random permutation to the hash value
+                permuted_hash_val = (coeffs[i][0] * hash_value + coeffs[i][1]) % coeffs[i][2]
+                # Update the current minimum hash value
+                if permuted_hash_val < signature_matrix[i][j]:
+                    signature_matrix[i][j] = permuted_hash_val
+
+    return signature_matrix
 
 
 # METHOD FOR TASK 4
