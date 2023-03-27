@@ -1,6 +1,7 @@
 # This is the code for the LSH project of TDT4305
 
-import configparser  # for reading the parameters file
+import configparser
+import itertools  # for reading the parameters file
 import sys  # for system errors and printouts
 from pathlib import Path  # for paths of files
 import os  # for reading the input data
@@ -162,9 +163,13 @@ def lsh(m_matrix):
         for document in range(len(m_matrix[0])):
             x = (m_matrix[shingle][document]*10+m_matrix[shingle+1][document]) % parameters_dictionary['buckets']
             my_dic[x].append(document+1)
+        for key in my_dic:
+            if len(my_dic[key]) > 1:
+                pairs = list(itertools.combinations(my_dic[key], 2))
+                for pair in pairs:
+                    if pair not in candidates:
+                        candidates.append(pair)
         dics.append(my_dic)
-
-
     return candidates
 
 # METHOD FOR TASK 5
