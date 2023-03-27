@@ -107,6 +107,7 @@ def signature_set(k_shingles):
     docs_signature_sets = []
     hash_values = []
     for i in range(0,len(document_list)):
+        print(i)
         doc = k_shingles[i]
         doc_signature_set = set()
         for j in range(len(doc)):
@@ -131,7 +132,7 @@ def minHash(docs_signature_sets):
     for i in range(num_hash_functions):
         a = random.randint(1, pow(2, 32) - 1)
         b = random.randint(0, pow(2, 32) - 1)
-        p = 4294967311
+        p = 53 #4294967311
         coeffs.append((a, b, p))
 
     # Compute the MinHash signature matrix
@@ -147,16 +148,24 @@ def minHash(docs_signature_sets):
 
     return signature_matrix
 
-
+#Når vi burker BBC må vi ha større p verdi
 # METHOD FOR TASK 4
 # Hashes the MinHash Signature Matrix into buckets and find candidate similar documents
-def lsh(m_matrix):
-    candidates = []  # list of candidate sets of documents for checking similarity
 
-    # implement your code here
+def lsh(m_matrix): 
+    candidates = []  # list of candidate sets of documents for checking similarity
+    r = parameters_dictionary['r'] 
+    dics = []
+    for shingle in range(0, len(m_matrix), r):
+        dic_key = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        my_dic = {key: [] for key in dic_key}
+        for document in range(len(m_matrix[0])):
+            x = (m_matrix[shingle][document]*10+m_matrix[shingle+1][document]) % parameters_dictionary['buckets']
+            my_dic[x].append(document+1)
+        dics.append(my_dic)
+
 
     return candidates
-
 
 # METHOD FOR TASK 5
 # Calculates the similarities of the candidate documents
