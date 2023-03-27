@@ -9,6 +9,10 @@ import time  # for timing
 import numpy as np  # for matrix operations
 import random  # for random numbers
 
+from random import randint
+
+random.seed(100)  # for reproducibility
+
 # Global parameters
 parameter_file = 'default_parameters.ini'  # the main parameters file
 data_main_directory = Path('data')  # the main path were all the data directories are
@@ -131,9 +135,9 @@ def minHash(docs_signature_sets):
     # Generate random coefficients for each hash function
     coeffs = []
     for i in range(num_hash_functions):
-        a = random.randint(1, pow(2, 32) - 1)
-        b = random.randint(0, pow(2, 32) - 1)
-        p = 53 #4294967311
+        a = randint(1, pow(2, 32) - 1)
+        b = randint(0, pow(2, 32) - 1)
+        p = parameters_dictionary['permutations']
         coeffs.append((a, b, p))
 
     # Compute the MinHash signature matrix
@@ -176,9 +180,9 @@ def lsh(m_matrix):
 # Calculates the similarities of the candidate documents
 def candidates_similarities(candidate_docs, min_hash_matrix):
     similarity_matrix = []
-
-    # implement your code here
-
+    for pair in candidate_docs:
+        jaccard_similarity = jaccard(set(min_hash_matrix[pair[0]]), set(min_hash_matrix[pair[1]]))
+        similarity_matrix.append((pair[0], pair[1], jaccard_similarity))
     return similarity_matrix
 
 
@@ -186,7 +190,7 @@ def candidates_similarities(candidate_docs, min_hash_matrix):
 # Returns the document pairs of over t% similarity
 def return_results(lsh_similarity_matrix):
     document_pairs = []
-
+    # if jaccard_similarity > parameters_dictionary['t']:
     # implement your code here
 
     return document_pairs
