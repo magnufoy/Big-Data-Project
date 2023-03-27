@@ -176,6 +176,7 @@ def lsh(m_matrix):
         dics.append(my_dic)
     return candidates
 
+
 # METHOD FOR TASK 5
 # Calculates the similarities of the candidate documents
 def candidates_similarities(candidate_docs, min_hash_matrix):
@@ -190,9 +191,12 @@ def candidates_similarities(candidate_docs, min_hash_matrix):
 # Returns the document pairs of over t% similarity
 def return_results(lsh_similarity_matrix):
     document_pairs = []
-    # if jaccard_similarity > parameters_dictionary['t']:
-    # implement your code here
-
+    print("")
+    for row in lsh_similarity_matrix:
+        if row[2] > parameters_dictionary['t']:
+            document_pairs.append((row[0], row[1]))
+            print("Dokumentpar:", row[0], "og", row[1], "Likhet:", row[2])
+    print("Antall matchene dokumenterpar:", len(document_pairs))
     return document_pairs
 
 
@@ -202,7 +206,14 @@ def count_false_neg_and_pos(lsh_similarity_matrix, naive_similarity_matrix):
     false_positives = 0
 
     # implement your code here
-
+    for row in lsh_similarity_matrix:
+        if row[2] > parameters_dictionary['t']:
+            if row not in naive_similarity_matrix:
+                false_positives += 1
+    for row in naive_similarity_matrix:
+        if row not in lsh_similarity_matrix:
+            false_negatives += 1
+    
     return false_negatives, false_positives
 
 
